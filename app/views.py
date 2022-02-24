@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import UserCreationForm
-from django.contrib.auth.models import User
+from .models import CustomUser, Party
 from django.contrib.auth import login
 
 
@@ -10,18 +10,37 @@ from django.contrib.auth import login
 
 def index(request):
     if request.user.is_authenticated:
-        return render(request, 'parties.html')
+        return redirect('app:party')
     else:
         return render(request, 'registration/login.html')
 
 
 @login_required(login_url='/accounts/login/')
 def party(request):
-    return render(request, 'parties.html')
+    parties = Party.objects.all()
+    context = {
+        'parties': parties,
+    }
+    return render(request, 'parties.html', context)
 
 
-def welcomeParty(request):
-    return render(request, 'welcome.html')
+def welcomeParty(request, id):
+    user = request.user
+    db_user = CustomUser.objects.get(email=user.email)
+    if db_user.party is None:
+        chosen_party = Party.objects.get(id=id)
+        db_user.party = chosen_party
+        db_user.save()
+        context = {
+            'Success': 'Successfully Joined New Party',
+            'chosen_party': chosen_party,
+        }
+    else:
+        in_party = db_user.party
+        context = {
+            'party': in_party,
+        }
+    return render(request, 'welcome.html', context)
 
 
 def register(request):
@@ -34,8 +53,8 @@ def register(request):
         password = request.POST['password']
         email = request.POST['email']
 
-        user = User.objects.create_user(username, email, password)
+        user = CustomUser.objects.create_user(username, email, password)
         user.save()
         login(request, user)
-        return render(request, 'parties.html')
+        return redirect('app:home')
     return render(request, 'register.html', context)

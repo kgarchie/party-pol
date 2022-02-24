@@ -1,33 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="flex mt-6">
-    <ul class="deck preload">
-        <li class="card">
-            <div class="content">
-                <img src="../static/images/Jubilee_Party.png" alt="">
-            </div>
-        </li>
-        <li class="card">
-            <div class="content">
-                <img src="../static/images/kanu.jpg" alt="">
-            </div>
-        </li>
-        <li class="card">
-            <div class="content">
-                <img src="../static/images/NASA.png" alt="">
-            </div>
-        </li>
-        <li class="card">
-            <div class="content">
-                <img src="../static/images/flag.gif" alt="">
-            </div>
-        </li>
-    </ul>
-</section>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        load();
-    });
-</script>
+    <section class="flex mt-6">
+        <ul class="deck preload">
+            {% for item in parties %}
+                <li class="card">
+                    <a href="{% url 'app:chosen' item.id %}">
+                        <div class="content">
+                        <img src="{{ item.banner.url }}" alt="">
+                    </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            load();
+        });
+    </script>
 {% endblock content %}

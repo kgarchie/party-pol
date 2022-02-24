@@ -1,13 +1,28 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    <title>Welcome to {{ party }}</title>
+    <title>Welcome to {{ chosen_party }}</title>
 {% endblock %}
 
 {% block content %}
-    <div class="mt-4 container">
-        <p>
-            Thank you for choosing {{ party }}
-        </p>
-    </div>
+    {% if chosen_party %}
+        <div class="container">
+            <p>
+                Thank you for choosing {{ chosen_party.name }}
+            </p>
+            <img src="{{ chosen_party.banner.url }}" alt=""
+                 style="height: 300px; aspect-ratio: 4/3; object-fit: contain">
+        </div>
+    {% elif party %}
+        <div class="container">
+            <p>
+                You are a member of KANU {{ party.name }} already
+                {# TODO add implementation for leaving a party #}
+            </p>
+            <img src="{{ party.banner.url }}" alt=""
+                 style="height: 300px; aspect-ratio: 4/3; object-fit: contain">
+        </div>
+    {% else %}
+        <p>You have not chosen any party</p>
+    {% endif %}
 {% endblock %}
