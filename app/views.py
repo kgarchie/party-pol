@@ -15,7 +15,6 @@ def index(request):
         return render(request, 'registration/login.html')
 
 
-@login_required(login_url='/accounts/login/')
 def party(request):
     parties = Party.objects.all()
     context = {
@@ -24,6 +23,7 @@ def party(request):
     return render(request, 'parties.html', context)
 
 
+@login_required(login_url='/accounts/login/')
 def welcomeParty(request, id):
     user = request.user
     db_user = CustomUser.objects.get(email=user.email)
