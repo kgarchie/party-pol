@@ -1,8 +1,6 @@
 # pol-party
 Political Party Alliance App
 
-# Project Valentines
-
 ## Getting Started (Windows)
 ### Prerequisites
 You will need:
